@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Animal Intrusion Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body class="bg-green-100">
+
+    <div class="flex h-screen">
+        <!-- Side Menu -->
+        <aside class="w-64 bg-green-800 text-white p-4">
+            <div style="padding: 10px; border-radius: 10px; background-color: white;"><img src="static/logo.png"></div>
+            <h2 class="text-2xl font-bold mb-4">Menu</h2>
+            <ul>
+                <li class="mb-2">
+                    <a href="/" class="hover:bg-green-700 px-4 py-2 rounded">Overview</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/devices" class="hover:bg-green-700 px-4 py-2 rounded">Devices</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/events" class="hover:bg-green-700 px-4 py-2 rounded">Events</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/rules" class="hover:bg-green-700 bg-green-700 px-4 py-2 rounded">Rules</a>
+                </li>
+            </ul>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <h1 class="text-3xl font-bold mb-4">Rules</h1>
+    
+            <!-- Connected Devices Table -->
+            <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+                <h2 class="text-xl font-bold mb-2">Rules</h2>
+                <table class="table-auto w-full" id="rulesTable">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Client ID</th>
+                            <th class="px-4 py-2">Parameter</th>
+                            <th class="px-4 py-2">Min</th>
+                            <th class="px-4 py-2">Max</th>
+                            <th class="px-4 py-2">Range trigger</th>
+                            <th class="px-4 py-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+       // Function to fetch devices from the API and update the table
+       function loadRules() {
+            $.getJSON("/_rules", function(data) {
+                var tableBody = $("#rulesTable tbody");
+                tableBody.empty(); // Clear existing data
+
+                $.each(data, function(index, rule) {
+                    var row = "<tr>" +
+                              "<td class='border px-4 py-2'>" + rule.client_id + "</td>" +
+                              "<td class='border px-4 py-2'>" + rule.parameter_name + "</td>" +
+                              "<td class='border px-4 py-2'>" + rule.min_range + "</td>" +
+                              "<td class='border px-4 py-2'>" + rule.max_range + "</td>" +
+                              "<td class='border px-4 py-2'>" + rule.trigger + "</td>" +
+                              "<td class='border px-4 py-2'>" + rule.callback + "</td>" +
+                              "</tr>";
+                    tableBody.append(row);
+                });
+            });
+        }
+
+                // Load devices on page load
+        $(document).ready(function(){
+            loadRules(); 
+        });
+    </script>
+
+</body>
+</html>

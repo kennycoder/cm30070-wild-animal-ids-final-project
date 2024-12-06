@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Animal Intrusion Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body class="bg-green-100">
+
+    <div class="flex h-screen">
+        <!-- Side Menu -->
+        <aside class="w-64 bg-green-800 text-white p-4">
+            <div style="padding: 10px; border-radius: 10px; background-color: white;"><img src="/static/logo.png"></div>
+            <h2 class="text-2xl font-bold mb-4">Menu</h2>
+            <ul>
+                <li class="mb-2">
+                    <a href="/" class="hover:bg-green-700 px-4 py-2 rounded">Overview</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/devices" class="hover:bg-green-700 bg-green-700 px-4 py-2 rounded">Devices</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/events" class="hover:bg-green-700 px-4 py-2 rounded">Events</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/rules" class="hover:bg-green-700 px-4 py-2 rounded">Rules</a>
+                </li>
+            </ul>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <h1 class="text-3xl font-bold mb-4">Settings</h1>
+    
+             <form id="settings-form">
+                <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+                    <h2 class="text-xl font-bold mb-2">Device Settings</h2>
+                    <div class="mb-4">
+                        <label for="ssid" class="block text-gray-700 text-sm font-bold mb-2">SSID</label>
+                        <input type="text" id="ssid" name="ssid" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="gateway" class="block text-gray-700 text-sm font-bold mb-2">Gateway</label>
+                        <input type="text" id="gateway" name="gateway" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="noise_threshold" class="block text-gray-700 text-sm font-bold mb-2">Noise Trigger Threshold</label>
+                        <input type="number" id="noise_threshold" name="noise_threshold" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="telemetry_interval" class="block text-gray-700 text-sm font-bold mb-2">Telemetry Interval</label>
+                        <input type="number" id="telemetry_interval" name="telemetry_interval" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="mqtt_broker" class="block text-gray-700 text-sm font-bold mb-2">MQTT Broker</label>
+                        <input type="text" id="mqtt_broker" name="mqtt_broker" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="mqtt_topic" class="block text-gray-700 text-sm font-bold mb-2">MQTT Topic</label>
+                        <input type="text" id="mqtt_topic" name="mqtt_topic" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="mqtt_topic_sub" class="block text-gray-700 text-sm font-bold mb-2">MQTT Topic Sub</label>
+                        <input type="text" id="mqtt_topic_sub" name="mqtt_topic_sub" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="mqtt_username" class="block text-gray-700 text-sm font-bold mb-2">MQTT Username</label>
+                        <input type="text" id="mqtt_username" name="mqtt_username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="mqtt_password" class="block text-gray-700 text-sm font-bold mb-2">MQTT Password</label>
+                        <input type="password" id="mqtt_password" name="mqtt_password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="mb-4">
+                        <label for="mqtt_port" class="block text-gray-700 text-sm font-bold mb-2">MQTT Port</label>
+                        <input type="number" id="mqtt_port" name="mqtt_port" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="">
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button id="submit" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus-shadow-outline">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </form>
+    
+
+        </main>
+    </div>
+    
+    <script>
+       // Function to fetch devices from the API and update the table
+       function loadSettings() {
+        $.getJSON("/_devices/settings/{{.DeviceID}}", function(data) {
+            $("#ssid").val(data.ssid);
+            $("#password").val(data.password);
+            $("#gateway").val(data.gateway);
+            $("#noise_threshold").val(data.noise_threshold);
+            $("#fall_threshold").val(data.fall_threshold);
+            $("#telemetry_interval").val(data.telemetry_interval);
+            $("#mqtt_broker").val(data.mqtt_broker);
+            $("#mqtt_topic").val(data.mqtt_topic);
+            $("#mqtt_topic_sub").val(data.mqtt_topic_sub);
+            $("#mqtt_username").val(data.mqtt_username);
+            $("#mqtt_password").val(data.mqtt_password);
+            $("#mqtt_port").val(data.mqtt_port);
+        });
+        }
+
+        // Load devices on page load
+        $(document).ready(function(){
+            loadSettings(); 
+            $(".dismiss-alert").click(function(){
+                $(this).closest("tr").remove(); 
+            });
+
+            $("#submit").click(function() {
+                
+                data = $("#settings-form").serializeArray()
+                const jsonData = data.reduce((acc, item) => {
+                    acc[item.name] = item.value;
+                    return acc;
+                }, {});
+
+                // keys fall_th, scream_th, telemetry_interval and mqtt_port should be sent as ints and not strings
+                jsonData.fall_threshold = parseInt(jsonData.fall_threshold);
+                jsonData.noise_threshold = parseInt(jsonData.noise_threshold);
+                jsonData.telemetry_interval = parseInt(jsonData.telemetry_interval);
+                jsonData.mqtt_port = parseInt(jsonData.mqtt_port);
+                
+                $.ajax({
+                    url: "/_devices/settings/{{.DeviceID}}",
+                    type: "POST",
+                    data: JSON.stringify(jsonData),
+                    contentType: "application/json",
+                    success: function(data) {
+                        console.log("Settings saved successfully!");
+                    },
+                    error: function(error) {
+                        console.error("Error saving settings:", error);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

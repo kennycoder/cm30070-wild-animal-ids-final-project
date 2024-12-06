@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Animal Intrusion Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body class="bg-green-100">
+
+    <div class="flex h-screen">
+        <!-- Side Menu -->
+        <aside class="w-64 bg-green-800 text-white p-4">
+            <div style="padding: 10px; border-radius: 10px; background-color: white;"><img src="static/logo.png"></div>
+            <h2 class="text-2xl font-bold mb-4">Menu</h2>
+            <ul>
+                <li class="mb-2">
+                    <a href="/" class="hover:bg-green-700 bg-green-700 px-4 py-2 rounded">Overview</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/devices" class="hover:bg-green-700 px-4 py-2 rounded">Devices</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/events" class="hover:bg-green-700 px-4 py-2 rounded">Events</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/rules" class="hover:bg-green-700 px-4 py-2 rounded">Rules</a>
+                </li>
+            </ul>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <h1 class="text-3xl font-bold mb-4">Overview</h1>
+
+            <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+                <h2 class="text-xl font-bold mb-2">UOL - CM3070 - Final Project - Student Number 210366118</h2>
+            </div>
+            <!-- Connected Devices Table -->
+            <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+                <h2 class="text-xl font-bold mb-2">Connected Devices</h2>
+                <table class="table-auto w-full" id="devicesTable">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">IP Address</th>
+                            <th class="px-4 py-2">Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                    </tbody>
+                </table>
+            </div>
+    
+            <!-- Active Alerts Table -->
+            <div class="bg-white shadow-md rounded-lg p-4">
+                <h2 class="text-xl font-bold mb-2">Active Alerts</h2>
+                <table class="table-auto w-full" id="alertsTable">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Type</th>
+                            <th class="px-4 py-2">Client ID</th>
+                            <th class="px-4 py-2">Timestamp</th>
+                            <th class="px-4 py-2">Message</th>
+                            <th class="px-4 py-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+       // Function to fetch devices from the API and update the table
+       function loadDevices() {
+            $.getJSON("/_devices", function(data) {
+                var tableBody = $("#devicesTable tbody");
+                tableBody.empty(); // Clear existing data
+
+                $.each(data, function(index, device) {
+                    var row = "<tr>" +
+                              "<td class='border px-4 py-2'>" + index + "</td>" +
+                              "<td class='border px-4 py-2'>" + device.ip + "</td>" +
+                              "<td class='border px-4 py-2'>" + device.device_type + "</td>" +
+                              "</tr>";
+                    tableBody.append(row);
+                });
+            });
+        }
+
+        function loadAlerts() {
+            $.getJSON("/_alerts", function(data) {
+                var tableBody = $("#alertsTable tbody");
+                tableBody.empty(); // Clear existing data
+
+                $.each(data, function(index, alert) {
+                    var row = "<tr>" +
+                              "<td class='border px-4 py-2'>" + alert.alert_type + "</td>" +
+                              "<td class='border px-4 py-2'>" + alert.client_id + "</td>" +
+                              "<td class='border px-4 py-2'>" + alert.timestamp + "</td>" +
+                              "<td class='border px-4 py-2'>" + alert.message + "</td>" +
+                              "<td class='border px-4 py-2'><button data-idx=\""+alert.id+"\" class=\"bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded dismiss-alert\">Dismiss</button></td>" +
+                              "</tr>";
+                    tableBody.append(row);
+                });
+
+                $(".dismiss-alert").click(function(){
+                    var idx = $(this).attr("data-idx");
+                    $(this).closest("tr").remove(); 
+                    $.ajax({
+                        url: "/_dismiss_alert?index=" + idx,
+                        type: "GET",
+                        success: function(data) {
+                            console.log("Alert dismissed successfully!");
+                        },
+                        error: function(error) {
+                            console.error("Error dismissing alert:", error);
+                        }
+                    });
+                });
+                
+
+            });
+        }        
+
+        // Load devices on page load
+        $(document).ready(function(){
+            loadDevices(); 
+            loadAlerts(); 
+            
+            // run loadAlerts every 5 seconds
+            setInterval(function() {
+                loadAlerts();
+                loadDevices();
+            }, 5000);
+        });
+    </script>
+
+</body>
+</html>
+

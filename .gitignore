@@ -1,0 +1,4 @@
+documents
+notebooks/dataset*
+gateway-yolo-inference/captures*
+fake-tmp

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Animal Intrusion Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body class="bg-green-100">
+
+    <div class="flex h-screen">
+        <!-- Side Menu -->
+        <aside class="w-64 bg-green-800 text-white p-4">
+            <div style="padding: 10px; border-radius: 10px; background-color: white;"><img src="static/logo.png"></div>
+            <h2 class="text-2xl font-bold mb-4">Menu</h2>
+            <ul>
+                <li class="mb-2">
+                    <a href="/" class="hover:bg-green-700 px-4 py-2 rounded">Overview</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/devices" class="hover:bg-green-700 bg-green-700 px-4 py-2 rounded">Devices</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/events" class="hover:bg-green-700 px-4 py-2 rounded">Events</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/rules" class="hover:bg-green-700 px-4 py-2 rounded">Rules</a>
+                </li>
+
+            </ul>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <h1 class="text-3xl font-bold mb-4">Devices</h1>
+    
+            <!-- Connected Devices Table --> 
+            <div class="bg-white shadow-md rounded-lg p-4 mb-6">
+                <h2 class="text-xl font-bold mb-2">Manage Connected Devices</h2>
+                <table class="table-auto w-full" id="devicesTable">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Name</th>
+                            <th class="px-4 py-2">IP Address</th>
+                            <th class="px-4 py-2">Stream preview</th>
+                            <th class="px-4 py-2">Type</th>
+                            <th class="px-4 py-2">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>                       
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+       // Function to fetch devices from the API and update the table
+       function loadDevices() {
+            $.getJSON("/_devices", function(data) {
+                var tableBody = $("#devicesTable tbody");
+                tableBody.empty(); // Clear existing data
+
+                $.each(data, function(index, device) {
+                    var imgSrc = "http://" + device.ip + "/capture"; // Construct image source URL
+
+                    var row = "<tr>" +
+                              "<td class='border px-4 py-2'>" + index + "</td>" +
+                              "<td class='border px-4 py-2'>" + device.ip + "</td>" +
+                              "<td class='border px-4 py-2'><img src='" + imgSrc + "' alt='Camera Stream' class='camera-stream' style='width: 160px'></td>" + // Add image tag
+                              "<td class='border px-4 py-2'>" + device.device_type + "</td>" +
+                              "<td class='border px-4 py-2'><a href='/devices/settings/"+index+"'><button class=\"bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded dismiss-warning\">Settings</button></a> <button class=\"bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded dismiss-alert\">Delete</button></td>" +
+                              "</tr>";
+                    tableBody.append(row);
+                });
+
+                // Update images every 5 seconds
+                setInterval(function() {
+                    $(".camera-stream").each(function() {
+                        // Cache busting using a timestamp
+                        this.src = this.src.split("?")[0] + "?" + new Date().getTime();
+                    });
+                }, 5000);                
+            });
+        }
+
+        // Load devices on page load
+        $(document).ready(function(){
+            loadDevices(); 
+            $(".dismiss-alert").click(function(){
+                $(this).closest("tr").remove(); 
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wild Animal Intrusion Detection System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body class="bg-green-100">
+
+    <div class="flex h-screen">
+        <!-- Side Menu -->
+        <aside class="w-64 bg-green-800 text-white p-4">
+            <div style="padding: 10px; border-radius: 10px; background-color: white;"><img src="static/logo.png"></div>
+            <h2 class="text-2xl font-bold mb-4">Menu</h2>
+            <ul>
+                <li class="mb-2">
+                    <a href="/" class="hover:bg-green-700 px-4 py-2 rounded">Overview</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/devices" class="hover:bg-green-700 px-4 py-2 rounded">Devices</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/events" class="hover:bg-green-700 bg-green-700 px-4 py-2 rounded">Events</a>
+                </li>
+                <li class="mb-2">
+                    <a href="/rules" class="hover:bg-green-700 px-4 py-2 rounded">Rules</a>
+                </li>
+            </ul>
+        </aside>
+    
+        <!-- Main Content -->
+        <main class="flex-1 p-4">
+            <h1 class="text-3xl font-bold mb-4">Events</h1>
+    
+            <!-- Active Alerts Table -->
+            <div class="bg-white shadow-md rounded-lg p-4">
+                <h2 class="text-xl font-bold mb-2">Active Alerts</h2>
+                <table class="table-auto w-full" id="eventsTable">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2">Timestamp</th>
+                            <th class="px-4 py-2">Event</th>
+                            <th class="px-4 py-2">Type</th>
+                            <th class="px-4 py-2">Client ID</th>
+                            <th class="px-4 py-2">Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+       // Function to fetch devices from the API and update the table
+       function loadEvents() {
+            $.getJSON("/_events", function(data) {
+                var tableBody = $("#eventsTable tbody");
+                tableBody.empty(); // Clear existing data
+
+                $.each(data, function(index, event) {
+                    // event.data contains key/value json. create an html table for it each key/value being in it's own row
+                    var data_table = "<table class='table-auto w-full'>";
+                    data_table += "<thead><tr><th class='px-4 py-2'>Parameter</th><th class='px-4 py-2'>Value</th></tr></thead>";
+                    data_table += "<tbody>";
+                    for (const key in event.data) {
+                        if (event.data.hasOwnProperty(key)) {
+                            // if event.data[key] is an object, flatten it into a string
+                            if (typeof event.data[key] === 'object') {
+                                event.data[key] = JSON.stringify(event.data[key]);
+                            }
+                            // add the key/value pair to the table
+                            data_table += "<tr><td class='border px-4 py-2'>" + key + "</td><td class='border px-4 py-2'>" + event.data[key] + "</td></tr>";
+                        }
+                    }
+                    data_table += "</tbody></table>";
+
+                    var row = "<tr>" +
+                              "<td class='border px-4 py-2'>" + event.local_timestamp + "</td>" +
+                              "<td class='border px-4 py-2'>" + event.event + "</td>" +
+                              "<td class='border px-4 py-2'>" + event.type + "</td>" +
+                              "<td class='border px-4 py-2'>" + event.client_id + "</td>" +
+                              "<td class='border px-4 py-2'>" + data_table + "</td>" + 
+                              
+                              "</tr>";
+                    
+                    tableBody.append(row);
+                });
+            });
+        }
+
+        // Load devices on page load
+        $(document).ready(function(){
+            // run loadEvents every 5 seconds
+            setInterval(loadEvents, 5000);
+            loadEvents(); 
+        });
+    </script>
+
+</body>
+</html>
