@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# I used this for dataset preparation
+
 # Check if ImageMagick is installed
 if ! command -v convert &> /dev/null; then
     echo "Error: ImageMagick is not installed. Install it using 'sudo apt install imagemagick' or equivalent."

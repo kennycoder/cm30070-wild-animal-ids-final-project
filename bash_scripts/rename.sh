@@ -4,7 +4,8 @@ generate_uuid() {
     uuidgen
 }
 
-# Function to rename files in a given folder, handling multiple extensions
+# Function to rename files in a given folder, handling multiple extensions.
+# I used this for dataset preparation
 rename_files() {
   local folder="$1"
 

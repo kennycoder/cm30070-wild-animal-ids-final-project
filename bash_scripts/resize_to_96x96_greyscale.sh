@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# I used this for dataset preparation
+
 # Check if ImageMagick is installed
 if ! command -v convert &> /dev/null; then
     echo "Error: ImageMagick is not installed. Install it using 'sudo apt install imagemagick' or equivalent."
@@ -16,4 +18,3 @@ find "$BASE_DIR" -type f -iname '*.png' | while read -r image; do
 done
 
 echo "All PNG images have been resized to 96x96 pixels."
-

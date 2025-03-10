@@ -89,6 +89,7 @@ func main() {
 
 	// MQTT client setup
 	mqttOptions = mqtt.NewClientOptions()
+	// change if runing on a different node or move to env var (better imho)
 	mqttOptions.AddBroker("tcp://127.0.0.1:1883")
 	mqttOptions.SetUsername("mod11")
 	mqttOptions.SetPassword("mod11pwd")

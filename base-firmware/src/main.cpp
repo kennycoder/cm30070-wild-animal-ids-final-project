@@ -93,6 +93,8 @@ void mqttCallback(char *, byte *, unsigned int);
 
 // Task function definitions
 void readInputTask(void *);
+
+// THIS is the main method that passes the framebuffer to the model
 bool analyzeFrameWithTFLiteModel();
 
 // Sensor function definitions
